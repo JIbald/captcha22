@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  captcha22:
+    build: .
+    ports:
+      - "5000:5000"  # API port
+      - "9000:9000"  # TensorFlow Serving port
+      - "9001:9001"  # TensorFlow Serving REST API port
+    volumes:
+      - ./Unsorted:/app/Unsorted
+      - ./data:/app/data
+    command: all
