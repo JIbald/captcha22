@@ -1,7 +1,0 @@
-werkzeug
-Flask
-Flask-Cors
-aocr
-Pillow
-requests
-python-magic
