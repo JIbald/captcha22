@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  captcha22:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile
+    container_name: captcha22
+    ports:
+      - "5000:5000"  # API port
+      - "9000:9000"  # TensorFlow Serving gRPC port
+      - "9001:9001"  # TensorFlow Serving REST API port
+    volumes:
+      - ${CAPTCHA_INPUT_DIR:-./captchas}:/data/input  # Mount directory with labeled captchas
+      - ${CAPTCHA_OUTPUT_DIR:-./output}:/data/output  # Mount directory for output
+      - ${MODEL_DIR:-./model}:/data/model             # Mount directory for the model
+    environment:
+      - MODEL_NAME=${MODEL_NAME:-captcha_model}
+      - TRAINING_MODE=${TRAINING_MODE:-auto}
+    restart: unless-stopped
