@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM tensorflow/tensorflow:1.15.5-py3
 
 # Install system dependencies
 RUN apt-get update && \
@@ -10,6 +10,8 @@ RUN apt-get update && \
     libsm6 \
     libxext6 \
     libxrender-dev \
+    zip \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install tensorflow serving (required for hosting models)
@@ -24,9 +26,9 @@ WORKDIR /app
 # Copy the CAPTCHA22 source code
 COPY . /app/
 
-# Install CAPTCHA22 and its dependencies
-RUN pip install --no-cache-dir "tensorflow<2" && \
-    pip install --no-cache-dir -e .
+# Install CAPTCHA22 and its dependencies 
+# Note: TensorFlow is already installed in the base image
+RUN pip install --no-cache-dir -e .
 
 # Copy the entrypoint script
 COPY deployments/entrypoint.sh /entrypoint.sh

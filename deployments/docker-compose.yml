@@ -14,7 +14,19 @@ services:
       - ${CAPTCHA_INPUT_DIR:-./captchas}:/data/input  # Mount directory with labeled captchas
       - ${CAPTCHA_OUTPUT_DIR:-./output}:/data/output  # Mount directory for output
       - ${MODEL_DIR:-./model}:/data/model             # Mount directory for the model
+      - ./logs:/app/logs                             # Mount directory for logs
     environment:
       - MODEL_NAME=${MODEL_NAME:-captcha_model}
       - TRAINING_MODE=${TRAINING_MODE:-auto}
+      - TF_CPP_MIN_LOG_LEVEL=${TF_CPP_MIN_LOG_LEVEL:-2}  # Control TensorFlow logging
+      - INPUT_DIR=/data/input
+      - OUTPUT_DIR=/data/output
+      - MODEL_DIR=/data/model
     restart: unless-stopped
+    shm_size: 2gb  # Increase shared memory for better performance
+    deploy:
+      resources:
+        limits:
+          memory: 4G  # Limit memory usage
+        reservations:
+          memory: 2G  # Reserve minimum memory
